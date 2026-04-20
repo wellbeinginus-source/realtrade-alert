@@ -368,7 +368,16 @@ export default function Home() {
         </section>
 
         {/* 광고 */}
-        <KakaoAdFit unit="DAN-7r7oU0EKUMSAOFS0" width={320} height={100} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "실거래가 알림",
+          description: "관심 지역 부동산 실거래가가 등록되면 텔레그램으로 바로 알려드립니다.",
+          applicationCategory: "FinanceApplication",
+          operatingSystem: "All",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" },
+        }) }} />
+                <KakaoAdFit unit="DAN-7r7oU0EKUMSAOFS0" width={320} height={100} />
         <AdBanner />
         <CoupangBanner />
 
