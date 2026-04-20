@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import { REGION_CODES } from "@/lib/molit-api";
 import { getConditions, saveCondition, deleteCondition, toggleCondition, type AlertCondition } from "@/lib/alert-conditions";
+import KakaoAdFit from "@/components/KakaoAdFit";
+import AdBanner from "@/components/AdBanner";
+import { CoupangBanner } from "@/components/CoupangBanner";
 
 const REGION_GROUPS: Record<string, string[]> = {
   "서울": Object.keys(REGION_CODES).filter((k) => k.startsWith("11")),
@@ -349,6 +352,21 @@ export default function Home() {
           </div>
         </section>
 
+        {/* 광고 */}
+        <KakaoAdFit unit="DAN-XXXXXXXXXX" width={320} height={100} />
+        <AdBanner />
+        <CoupangBanner />
+
+        {/* 면책 문구 */}
+        <div className="mt-6 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          <p className="font-semibold mb-1">안내</p>
+          <p>
+            본 서비스는 국토교통부 실거래가 공개시스템의 데이터를 활용하며,
+            데이터의 정확성을 보장하지 않습니다. 실거래 신고 후 공개까지 시차가
+            있을 수 있으며, 투자 판단의 책임은 이용자에게 있습니다.
+          </p>
+        </div>
+
         {/* 푸터 */}
         <footer className="mt-8 mb-4 text-center">
           <p className="text-xs text-zinc-400">
@@ -360,7 +378,7 @@ export default function Home() {
             <a href="https://unsehanip.vercel.app" className="hover:text-zinc-600">운세한입</a>
           </div>
           <p className="mt-2 text-xs text-zinc-400">
-            운영: 온기획(ON) | 2026
+            운영: 온기획(ON) | 이메일: js4yj@naver.com
           </p>
         </footer>
       </main>
