@@ -353,7 +353,7 @@ export default function Home() {
         </section>
 
         {/* 광고 */}
-        <KakaoAdFit unit="DAN-XXXXXXXXXX" width={320} height={100} />
+        <KakaoAdFit unit="DAN-7r7oU0EKUMSAOFS0" width={320} height={100} />
         <AdBanner />
         <CoupangBanner />
 
