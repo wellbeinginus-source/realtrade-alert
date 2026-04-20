@@ -390,7 +390,6 @@ export default function Home() {
           <div className="mt-2 flex justify-center gap-4 text-xs text-zinc-400">
             <a href="https://auction-calc.vercel.app" className="hover:text-zinc-600">경매 계산기</a>
             <a href="https://tax-calc-five.vercel.app" className="hover:text-zinc-600">세금 계산기</a>
-            <a href="https://unsehanip.vercel.app" className="hover:text-zinc-600">운세한입</a>
           </div>
           <p className="mt-2 text-xs text-zinc-400">
             운영: 온기획(ON) | 이메일: js4yj@naver.com
