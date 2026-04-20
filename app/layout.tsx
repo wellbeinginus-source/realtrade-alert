@@ -54,7 +54,7 @@ export default function RootLayout({
     >
 
       <head>
-        <meta name="naver-site-verification" content="184c0c637db55b53d317c42dfe197e849129a7ce" />
+        <meta name="naver-site-verification" content="15bf7036f6b71afbcf2e4d6d870f47f66a62e5c3" />
         {/* Google Analytics */}
         <script
           async
