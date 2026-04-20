@@ -1,39 +1,47 @@
 import { NextResponse } from "next/server";
+import { addSubscriber, getSubscribers, removeSubscriber } from "@/lib/subscribers";
 
 /**
- * 구독 등록 API (MVP: 서버 저장 준비용 스텁)
- * POST /api/subscribe
- * Body: { conditions, notifyMethod, notifyTarget }
+ * 구독 관리 API
  *
- * TODO: DB 연동 후 실제 저장 구현
+ * GET  /api/subscribe              → 전체 구독자 목록
+ * POST /api/subscribe              → 구독 등록/수정
+ * DELETE /api/subscribe?chatId=X&name=Y → 구독 삭제
  */
+
+export async function GET() {
+  const subscribers = getSubscribers();
+  return NextResponse.json({ ok: true, subscribers });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { conditions, notifyMethod, notifyTarget } = body;
+    const { chatId, name, regionCodes, minPrice, maxPrice, minArea, maxArea } =
+      body;
 
-    if (!conditions || !notifyMethod || !notifyTarget) {
+    if (!chatId || !name || !regionCodes || !Array.isArray(regionCodes)) {
       return NextResponse.json(
-        { error: "conditions, notifyMethod, notifyTarget 필수" },
+        { error: "chatId, name, regionCodes(배열) 필수" },
         { status: 400 }
       );
     }
 
-    // TODO: DB에 구독 정보 저장
-    // TODO: 텔레그램 bot 연동 시 chat_id 검증
-    // TODO: 이메일 인증 발송
+    addSubscriber({
+      chatId,
+      name,
+      regionCodes,
+      minPrice,
+      maxPrice,
+      minArea,
+      maxArea,
+      active: true,
+    });
 
     return NextResponse.json({
       ok: true,
-      message: "구독 등록 완료 (베타)",
-      subscription: {
-        id: `sub_${Date.now()}`,
-        conditions,
-        notifyMethod,
-        notifyTarget,
-        createdAt: new Date().toISOString(),
-      },
+      message: "구독 등록 완료",
     });
   } catch {
     return NextResponse.json(
@@ -41,4 +49,24 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
+}
+
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const chatId = searchParams.get("chatId");
+  const name = searchParams.get("name");
+
+  if (!chatId || !name) {
+    return NextResponse.json(
+      { error: "chatId, name 파라미터 필수" },
+      { status: 400 }
+    );
+  }
+
+  const removed = removeSubscriber(chatId, name);
+
+  return NextResponse.json({
+    ok: removed,
+    message: removed ? "구독 삭제 완료" : "해당 구독을 찾을 수 없음",
+  });
 }

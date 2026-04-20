@@ -1,0 +1,10 @@
+[
+  {
+    "chatId": "8633837762",
+    "name": "테스트",
+    "regionCodes": ["11680", "11650"],
+    "maxPrice": 150000,
+    "minArea": 59,
+    "active": true
+  }
+]
