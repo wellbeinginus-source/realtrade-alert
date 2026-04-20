@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   const dealYearMonth = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
 
   // 활성 구독자 로드
-  const subscribers = getActiveSubscribers();
+  const subscribers = await getActiveSubscribers();
 
   if (subscribers.length === 0) {
     return NextResponse.json({

@@ -39,7 +39,7 @@ export default function Home() {
     setConditions(getConditions());
   }, []);
 
-  function handleSave() {
+  async function handleSave() {
     if (!name.trim() || selectedDistricts.length === 0) return;
 
     saveCondition({
@@ -52,6 +52,21 @@ export default function Home() {
       notifyTarget: notifyTarget.trim(),
       active: true,
     });
+
+    // 텔레그램 알림이 있으면 서버에도 구독 등록
+    if (notifyMethod === "telegram" && notifyTarget.trim()) {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chatId: notifyTarget.trim(),
+          name: name.trim(),
+          regionCodes: selectedDistricts,
+          maxPrice: maxPrice || undefined,
+          minArea: minArea || undefined,
+        }),
+      }).catch(() => {});
+    }
 
     setConditions(getConditions());
     resetForm();

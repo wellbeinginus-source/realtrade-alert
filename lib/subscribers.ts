@@ -1,39 +1,34 @@
-/**
- * 구독자 관리 (MVP: JSON 파일 기반)
- */
-
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { kv } from "@vercel/kv";
 
 export interface Subscriber {
   chatId: string;
   name: string;
   regionCodes: string[];
   minPrice?: number;
-  maxPrice?: number;      // 만원 단위
-  minArea?: number;       // ㎡
+  maxPrice?: number;
+  minArea?: number;
   maxArea?: number;
   active: boolean;
 }
 
-const DATA_PATH = join(process.cwd(), "data", "subscribers.json");
+const KV_KEY = "subscribers";
 
-export function getSubscribers(): Subscriber[] {
+export async function getSubscribers(): Promise<Subscriber[]> {
   try {
-    const raw = readFileSync(DATA_PATH, "utf-8");
-    return JSON.parse(raw) as Subscriber[];
+    const data = await kv.get<Subscriber[]>(KV_KEY);
+    return data ?? [];
   } catch {
     return [];
   }
 }
 
-export function getActiveSubscribers(): Subscriber[] {
-  return getSubscribers().filter((s) => s.active);
+export async function getActiveSubscribers(): Promise<Subscriber[]> {
+  const subs = await getSubscribers();
+  return subs.filter((s) => s.active);
 }
 
-export function addSubscriber(sub: Subscriber): void {
-  const subs = getSubscribers();
-  // 같은 chatId + name 중복 방지
+export async function addSubscriber(sub: Subscriber): Promise<void> {
+  const subs = await getSubscribers();
   const idx = subs.findIndex(
     (s) => s.chatId === sub.chatId && s.name === sub.name
   );
@@ -42,15 +37,15 @@ export function addSubscriber(sub: Subscriber): void {
   } else {
     subs.push(sub);
   }
-  writeFileSync(DATA_PATH, JSON.stringify(subs, null, 2), "utf-8");
+  await kv.set(KV_KEY, subs);
 }
 
-export function removeSubscriber(chatId: string, name: string): boolean {
-  const subs = getSubscribers();
+export async function removeSubscriber(chatId: string, name: string): Promise<boolean> {
+  const subs = await getSubscribers();
   const filtered = subs.filter(
     (s) => !(s.chatId === chatId && s.name === name)
   );
   if (filtered.length === subs.length) return false;
-  writeFileSync(DATA_PATH, JSON.stringify(filtered, null, 2), "utf-8");
+  await kv.set(KV_KEY, filtered);
   return true;
 }
