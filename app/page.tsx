@@ -401,7 +401,7 @@ export default function Home() {
             <a href="https://tax-calc-five.vercel.app" className="hover:text-zinc-600">세금 계산기</a>
           </div>
           <p className="mt-2 text-xs text-zinc-400">
-            운영: 온기획(ON) | 이메일: js4yj@naver.com
+            운영: 온기획(ON) | 이메일: yj6z0907@gmail.com
           </p>
         </footer>
       </main>
